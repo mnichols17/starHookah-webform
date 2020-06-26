@@ -1,0 +1,71 @@
+* {
+    touch-action: manipulation;
+}
+
+#loading {
+    margin: 15%;
+}
+
+.flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+#item-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    width: 10rem;
+    margin: .8rem;
+    background: #F8F9FA;
+}
+
+.card-body {
+    padding: 8%;
+}
+
+.quantity-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+}
+
+.quantity-group h4 {
+    margin: 0;
+}
+
+.quantity-group > .btn {
+    width: 45px;
+}
+
+.list-group {
+    margin: 1rem 0;
+}
+
+.list-group-item {
+    width: 300px;
+    font-size: 1.2em;
+}
+
+span {
+    width: 40px;
+}
+
+#button-group {
+    margin: 2% 0%;
+}
+
+#button-group button, #return-button {
+    width: 300px;
+    border-radius: 10px;
+    padding: 2%;
+    font-size: 1.5em;
+    margin: 4% 0%;
+    text-align: center;
+}
