@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const firebase = require('firebase');
-const admin = require('firebase-admin');
 require('dotenv').config()
 
 const app = express();
@@ -39,6 +38,7 @@ function checkUID(req, res, next) {
 }
 
 app.get('/api/order/:uid', checkUID, (req, res) => {
+    
     db.collection('stock')
     .get()
     .then(querySnapshot => {
@@ -51,14 +51,12 @@ app.post('/api/order/:uid', checkUID, (req, res) => {
     const {cart} = req.body;
     const order = req.order;
 
-    // var updates = {};
-    // updates['/orders/' + order.id + '/orderCart/' + order.orderCart.length] = cart;
-    // firebase.database().ref().update(updates);
-
     try {
         order.orderCart = [...order.orderCart, ...cart];
-        res.status(201).json({msg: "ORDER ADDED", object: order});
-    } catch {
+        db.collection("orders").doc(order.id).set(order);
+        res.status(201).json({msg: "ORDER ADDED"});
+    }
+    catch {
         res.status(400).json({Error: "Invalid UID"});
     }
 })
