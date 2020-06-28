@@ -19,7 +19,7 @@ const App = () => {
 		//mdo0G61dwIMVMTGauTTnNtUeNTp2
 		const getData = async() => {
 			axios.get(`/api/order/${queryString.parse(window.location.search).user}`)
-			.then(res => setItems(res.data))
+			.then(res => setItems(res.data.items))
 			.catch(err => setPage(3))
 		}
 		getData();
@@ -49,7 +49,7 @@ const App = () => {
 		.catch(err => setPage(3))
 	}
 
-	let title, sub, view, buttonText; //make an object from these view with useState
+	let title, sub, view, buttonText;
 
 	switch(page){
 		case(3):
@@ -71,12 +71,15 @@ const App = () => {
 		default:
 			title = "Store";
 			sub = `Items in cart: ${cartSize}`;
-			view = items.length > 0 ? 
-				items.map(item => item.restricted_item ? <Item key={item.ItemID} item={item} quantity={cart[item.ItemID]} edit={editCart}/> : null) 
-				: <ReactLoading id="loading" type={'spin'} color={'#2199E8'} height={100} width={100} />
+			view = 
+			<div id="item-container">
+				{items.length > 0 ? 
+				items.map(item => item.restricted_item ? <Item key={item.ItemID} item={item} quantity={cart[item.ItemID]} edit={editCart} /> : null) 
+				: <ReactLoading id="loading" type={'spin'} color={'#2199E8'} height={100} width={100} />}
+			</div>
 			buttonText = "Confirm";
 	}
-
+	
 	return(
 		<div className="flex">
 			<h1 className="display-4">{title}</h1>

@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const firebase = require('firebase');
 const admin = require('firebase-admin');
 require('dotenv').config()
 
@@ -21,8 +20,10 @@ const serviceAccount = {
 }
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
+    storageBucket: "gs://starhookah-1e4ce.appspot.com"
 });
 const db = admin.firestore();
+const bucket = admin.storage().bucket();
 
 app.use(express.json());
 
@@ -41,17 +42,39 @@ function checkUID(req, res, next) {
     })
 }
 
+app.get('/api/image/:item', (req, res) => {
+    bucket.getFiles((err, files) => {
+        if (!err) {
+            const file = files.find(file => {
+                return file.name.split('/')[1] === req.params.item
+            })
+            if(file) {
+                const config = {
+                    action: 'read',
+                    expires: '03-17-2025'
+                };
+                file.getSignedUrl(config, (err, url) => {
+                    if (err) {
+                        return;
+                    }
+                    res.json(url)
+                });
+            }
+        }
+    });
+})
+
 app.get('/api/order/:uid', checkUID, (req, res) => {
     db.collection('stock')
     .get()
     .then(querySnapshot => {
-        res.json(querySnapshot.docs.map(doc => doc.data()));
+        res.json({items: querySnapshot.docs.map(doc => doc.data())});
     })
 })
 
 app.post('/api/order/:uid', checkUID, (req, res) => {
     const {cart} = req.body;
-    const order = req.order;
+    let order = req.order;
 
     order.orderCart = [...order.orderCart, ...cart];
     db.collection("orders").doc(order.id).set(order);
