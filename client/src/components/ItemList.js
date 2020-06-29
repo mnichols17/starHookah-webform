@@ -12,7 +12,6 @@ export default ({item, quantity, edit}) => {
                 setUrl(res.data)
             })
         }
-
         getItems();
 	}, [])
     

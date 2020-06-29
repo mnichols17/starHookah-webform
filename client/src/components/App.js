@@ -41,7 +41,7 @@ const App = () => {
 		let order = []
         items.forEach(item => {
             const quantity = cart[item.ItemID];
-            if (quantity > 0) order.push({itemID: item.ItemID, name: item.name, notes: "", quantity, unitCost: quantity * item.cost})
+            if (quantity > 0) order.push({itemID: item.ItemID, name: item.name, notes: "", quantity, unitCost: item.cost})
 		})
 
 		axios.post(`/api/order/${queryString.parse(window.location.search).user}`, {cart: order})
